@@ -20,7 +20,7 @@
         </div>
 
         @endif
-        <h1>WELCOME {{ Auth::user()->name }}</h1>
+        <h1>WELCOME {{ Auth::user()->name }} To The Admin Page</h1>
         <form action="{{ route('logout') }}" method="post">
             @csrf
             <button type="submit">Logout</button>

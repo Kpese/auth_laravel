@@ -14,6 +14,10 @@ class AuthController extends Controller
         return view('home');
     }
 
+    public function admin()
+    {
+        return view('admin');
+    }
 
     public function register()
     {
@@ -48,13 +52,32 @@ class AuthController extends Controller
             'email' => 'email',
         ]);
 
+
         if(Auth::attempt($validate)){
             request()->session()->regenerate();
-            return redirect()->route('home')->with('success', "welcome, you have successfully logged in");
+
+            $usertype = Auth::user()->usertype;
+            if($usertype == 'admin'){
+                return redirect()->route('admin')->with('success', "welcome, you have successfully logged in");
+
+            } else if ($usertype == 'user') {
+                return redirect()->route('home')->with('success', "welcome, you have successfully logged in");
+            }
         } else{
             return redirect()->route('login')->withErrors([
-                'email' => 'No matching user found with the provided email and password']);
+            'email' => 'No matching user found with the provided email and password']);
         }
+
+  }
+
+
+  public function logout(){
+        Auth::logout();
+
+        request()->session()->regenerate();
+        request()->session()->regenerateToken();
+
+        return redirect()->route('login');
 
   }
 }
